@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+// [START java_declaration]
+option java_package = "org.example";
+option java_multiple_files = true;
+// [END java_declaration]
+
+import "Clan.proto";
+import "User.proto";
+
+message Message {
+    enum OpCode {
+        UNKNOWN = 0;
+        MESSAGE_CONFIRM = 1;
+        ERROR = 2;
+
+        CREATE_CLAN = 50;
+        ADD_MONEY_TO_CLAN = 51;
+        TAKE_MONEY_FROM_CLAN = 52;
+
+        CREATE_USER = 100;
+
+    }
+
+    MessageConfirm message_confirm = 1;
+    ErrorMessage error_message = 2;
+
+    OpCode op_code = 3;
+    //Unique identifier required to confirm that the message has been sent
+    int32 seq_index = 4;
+
+    // We skipped a few digits to 50 to have a margin for service fields
+    CreateClanDto create_clan_dto = 50;
+    AddMoneyDto add_money_dto = 51;
+    TakeMoneyDto take_money_dto = 52;
+
+    CreateUserDto create_user_dto = 100;
+
+}
+
+//message sent by the server to confirm receipt of a packet
+message MessageConfirm {
+    int32 seq_index = 1;
+}
+
+message ErrorMessage {
+    int32 seq_index = 1;
+    string error_message = 2;
+}
+
+
